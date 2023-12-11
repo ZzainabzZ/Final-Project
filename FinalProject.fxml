@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Controller">
+   <children>
+      <Text fx:id="nameOfCity" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City" textAlignment="CENTER" wrappingWidth="400.0">
+         <font>
+            <Font size="54.0" />
+         </font>
+      </Text>
+      <Canvas fx:id="clock" height="200.0" layoutX="100.0" layoutY="126.0" width="200.0" />
+      <VBox layoutY="334.0" prefHeight="200.0" prefWidth="400.0">
+         <children>
+            <Label fx:id="digitalClock" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="differentTime" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time Difference" textAlignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Label fx:id="lastedUpdate" alignment="CENTER" layoutY="544.0" prefHeight="25.0" prefWidth="400.0" text="Last Updated" textAlignment="CENTER" />
+   </children>
+</AnchorPane>
