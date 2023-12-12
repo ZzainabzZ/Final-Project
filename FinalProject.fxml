@@ -2,12 +2,14 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
       <Text fx:id="nameOfCity" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City" textAlignment="CENTER" wrappingWidth="400.0">
          <font>
@@ -15,7 +17,7 @@
          </font>
       </Text>
       <Canvas fx:id="clock" height="200.0" layoutX="100.0" layoutY="126.0" width="200.0" />
-      <VBox layoutY="334.0" prefHeight="200.0" prefWidth="400.0">
+      <VBox layoutY="400.0" prefHeight="200.0" prefWidth="400.0">
          <children>
             <Label fx:id="digitalClock" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time">
                <font>
@@ -29,6 +31,19 @@
             </Label>
          </children>
       </VBox>
-      <Label fx:id="lastedUpdate" alignment="CENTER" layoutY="544.0" prefHeight="25.0" prefWidth="400.0" text="Last Updated" textAlignment="CENTER" />
+      <HBox layoutY="326.0" prefHeight="61.0" prefWidth="400.0">
+         <children>
+            <RadioButton fx:id="twelveHourClock" mnemonicParsing="false" prefHeight="61.0" prefWidth="200.0" text="12-Hour Clock">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="twentyFourHourClock" mnemonicParsing="false" prefHeight="77.0" prefWidth="200.0" text="24-Hour Clock">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </RadioButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
