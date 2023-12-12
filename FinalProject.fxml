@@ -17,20 +17,6 @@
          </font>
       </Text>
       <Canvas fx:id="clock" height="200.0" layoutX="100.0" layoutY="126.0" width="200.0" />
-      <VBox layoutY="400.0" prefHeight="200.0" prefWidth="400.0">
-         <children>
-            <Label fx:id="digitalClock" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
-            <Label fx:id="differentTime" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time Difference" textAlignment="CENTER">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
       <HBox layoutY="326.0" prefHeight="61.0" prefWidth="400.0">
          <children>
             <RadioButton fx:id="twelveHourClock" mnemonicParsing="false" prefHeight="61.0" prefWidth="200.0" text="12-Hour Clock">
@@ -45,5 +31,19 @@
             </RadioButton>
          </children>
       </HBox>
+      <VBox layoutY="400.0" prefHeight="200.0" prefWidth="400.0">
+         <children>
+            <Label fx:id="digitalClock" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="differentTime" alignment="CENTER" prefHeight="100.0" prefWidth="400.0" text="Time Difference" textAlignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
