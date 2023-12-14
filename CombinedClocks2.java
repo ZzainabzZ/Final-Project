@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -27,9 +26,8 @@ public class CombinedClocks2 extends JFrame {
         SwingUtilities.invokeLater(() -> {
             CombinedClocks2 clocks2 = new CombinedClocks2();
             clocks2.setVisible(true);
-        });
-    }
-
+});
+}
     private CombinedClocks2() {
         setTitle("Combined Clocks Application");
         setSize(400, 400);
@@ -39,26 +37,16 @@ public class CombinedClocks2 extends JFrame {
         JFXPanel jfxPanel = new JFXPanel();
         add(jfxPanel);
 
-        // Create a button
-        JButton button = new JButton("Update Time");
-        button.addActionListener(e -> updateClockFromApi());
-
-        // Create a layout to stack the JFXPanel and the button
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(jfxPanel, BorderLayout.CENTER);
-        panel.add(button, BorderLayout.CENTER);
-
         // Set the layout as the content pane
-        setContentPane(panel);
+        setContentPane(jfxPanel);
 
         // Schedule the clock update task every 1 minute
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::updateClockFromApi, 0, 1, TimeUnit.MINUTES);
     }
-
     public void updateClockFromApi() {
         try {
-            // Use the correct WorldTimeAPI endpoint for Sri Lanka (Asia/Colombo)
+            // Uses the correct WorldTimeAPI endpoint for Sri Lanka (Asia/Colombo)
             String apiUrl = "https://worldtimeapi.org/api/timezone/Asia/Colombo";
             HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
             connection.setRequestMethod("GET");
@@ -88,12 +76,12 @@ public class CombinedClocks2 extends JFrame {
                     ClockPanel clockPanel = createClockPanel(localDateTime.toLocalTime());
                     setContentPane(clockPanel);
                     revalidate();
-                });
-            }
+});
+}
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
+}
+}
 
     private int parseUtcOffset(String utcOffset) {
         // Parse the UTC offset string and convert it to seconds
@@ -101,18 +89,18 @@ public class CombinedClocks2 extends JFrame {
         int hours = Integer.parseInt(parts[0]);
         int minutes = Integer.parseInt(parts[1]);
         return hours * 3600 + minutes * 60;
-    }
+}
 
     private ClockPanel createClockPanel(LocalTime localTime) {
         return new ClockPanel(localTime);
-    }
+}
 
     static class ClockPanel extends JPanel {
         private LocalTime apiWorldTime;
 
         public ClockPanel(LocalTime apiWorldTime) {
             this.apiWorldTime = apiWorldTime;
-        }
+}
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -149,8 +137,8 @@ public class CombinedClocks2 extends JFrame {
                 // Draw second hand
                 int second = apiWorldTime.getSecond();
                 drawHand(g2, centerX, centerY, second * 6, radius * 0.8);
-            }
-        }
+}
+}
 
         private void drawHand(Graphics2D g2, int centerX, int centerY, int angleDegrees, double length) {
             double angleRadians = Math.toRadians(-angleDegrees + 90);
@@ -158,7 +146,7 @@ public class CombinedClocks2 extends JFrame {
             int y = (int) (centerY - length * Math.sin(angleRadians));
 
             g2.drawLine(centerX, centerY, x, y);
-        }
+}
 
         private void drawClockNumbers(Graphics2D g2, int centerX, int centerY, int radius) {
             Font font = new Font("Arial", Font.PLAIN, 16);
@@ -179,8 +167,8 @@ public class CombinedClocks2 extends JFrame {
                 } else {
                     // Draw minute lines
                     g2.drawLine(x1, y1, x1 + 5, y1);
-                }
-            }
+}
+}
 
             for (int hour = 1; hour <= 12; hour++) {
                 double angleRadians = Math.toRadians(-hour * 30 + 90);
@@ -193,7 +181,7 @@ public class CombinedClocks2 extends JFrame {
                 int numberHeight = metrics.getHeight();
 
                 g2.drawString(number, x - numberWidth / 2, y + numberHeight / 2);
-            }
-        }
-    }
+}
+}
+}
 }
