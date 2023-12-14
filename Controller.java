@@ -69,12 +69,33 @@ public class Controller {
 
     public void initialize() {
         preferences = Preferences.userNodeForPackage(Controller.class);
+        nameOfCity.setText("Colombo");
 
         initializeRadioButtons();
         startClockUpdateTimer();
     }
 
-    private void initializeRadioButtons() {}
+    private void initializeRadioButtons() {
+        ToggleGroup toggleGroup = new ToggleGroup();
+        twelveHourClock.setToggleGroup(toggleGroup);
+        twentyFourHourClock.setToggleGroup(toggleGroup);
+
+        String lastSelected = preferences.get("lastSelected", "twentyFourHourClock");
+        if (lastSelected.equals("twelveHourClock")) {
+            twelveHourClock.setSelected(true);
+        } else {
+            twentyFourHourClock.setSelected(true);
+        }
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == twelveHourClock) {
+                preferences.put("lastSelected", "twelveHourClock");
+            } else {
+                preferences.put("lastSelected", "twentyFourHourClock");
+            }
+        });
+    }
+
 
     private void startClockUpdateTimer() {
         AnimationTimer timer = new AnimationTimer() {
@@ -87,6 +108,8 @@ public class Controller {
                     String localTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String difference = calculateTimeDifference(localTime, cityTime);
                     displayTimeDifference(difference);
+                    drawAnalogClock(cityTime);
+
 
 
                 } catch (IOException e) {
@@ -121,7 +144,46 @@ public class Controller {
         differentTime.setText("Time Difference: " + difference);
     }
 
+    private void drawAnalogClock(String time) {
+        GraphicsContext gc = clock.getGraphicsContext2D();
+        gc.clearRect(0, 0, clock.getWidth(), clock.getHeight());
 
+
+        LocalTime localTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        int hours = localTime.getHour();
+        int minutes = localTime.getMinute();
+        int seconds = localTime.getSecond();
+
+
+        double centerX = clock.getWidth() / 2;
+        double centerY = clock.getHeight() / 2;
+        double radius = Math.min(centerX, centerY) - 10;
+
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(2);
+        gc.strokeOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
+
+
+        double hourAngle = Math.toRadians((hours % 12 + minutes / 60.0) * 30);
+        drawClockHand(gc, centerX, centerY, radius * 0.5, hourAngle);
+
+
+        double minuteAngle = Math.toRadians(minutes * 6);
+        drawClockHand(gc, centerX, centerY, radius * 0.7, minuteAngle);
+
+
+        double secondAngle = Math.toRadians(seconds * 6);
+        drawClockHand(gc, centerX, centerY, radius * 0.9, secondAngle);
+    }
+
+    private void drawClockHand(GraphicsContext gc, double centerX, double centerY, double length, double angle) {
+        double endX = centerX + length * Math.sin(angle);
+        double endY = centerY - length * Math.cos(angle);
+
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(2);
+        gc.strokeLine(centerX, centerY, endX, endY);
+    }
 
 
     private String calculateTimeDifference(String localTime, String colomboTime) {
