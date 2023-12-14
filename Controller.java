@@ -50,10 +50,7 @@ public class Controller {
             connection = (HttpURLConnection) url.openConnection();
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
-
             WorldTimeResponse worldTimeResponse = new Gson().fromJson(reader, WorldTimeResponse.class);
-
-
 
             String dateTime = worldTimeResponse.getDateTime();
             LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
@@ -94,12 +91,18 @@ public class Controller {
         });
     }
 
+     private void startClockUpdateTimer() {
+            AnimationTimer timer = new AnimationTimer() {
+            private long lastRequestTime = 0;
+            private static final long MINIMUM_REQUEST_INTERVAL = 1000; // 1 second
 
-    private void startClockUpdateTimer() {
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                try {
+        @Override
+        public void handle(long now) {
+            try {
+                long currentTime = System.currentTimeMillis();
+                
+                // Check if the minimum request interval has elapsed since the last request
+                if (currentTime - lastRequestTime >= MINIMUM_REQUEST_INTERVAL) {
                     String cityTime = getColomboTime();
                     displayCityTime(cityTime);
 
@@ -108,16 +111,18 @@ public class Controller {
                     displayTimeDifference(difference);
                     drawAnalogClock(cityTime);
 
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    // Update the last request time
+                    lastRequestTime = currentTime;
                 }
-            }
-        };
 
-        timer.start();
-    }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    timer.start();
+}
 
     private void displayCityTime(String cityTime) {
         String formattedTime;
@@ -146,12 +151,10 @@ public class Controller {
         GraphicsContext gc = clock.getGraphicsContext2D();
         gc.clearRect(0, 0, clock.getWidth(), clock.getHeight());
 
-
         LocalTime localTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ss"));
         int hours = localTime.getHour();
         int minutes = localTime.getMinute();
         int seconds = localTime.getSecond();
-
 
         double centerX = clock.getWidth() / 2;
         double centerY = clock.getHeight() / 2;
@@ -161,14 +164,21 @@ public class Controller {
         gc.setLineWidth(2);
         gc.strokeOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
 
+        // Draw clock numbers
+        for (int i = 1; i <= 12; i++) {
+            double angle = Math.toRadians(-i * 30 + 90);
+            double x = centerX + 0.8 * radius * Math.cos(angle);
+            double y = centerY - 0.8 * radius * Math.sin(angle);
 
+            gc.strokeText(Integer.toString(i), x, y);
+        }
+
+        // Draw clock hands
         double hourAngle = Math.toRadians((hours % 12 + minutes / 60.0) * 30);
         drawClockHand(gc, centerX, centerY, radius * 0.5, hourAngle);
 
-
         double minuteAngle = Math.toRadians(minutes * 6);
         drawClockHand(gc, centerX, centerY, radius * 0.7, minuteAngle);
-
 
         double secondAngle = Math.toRadians(seconds * 6);
         drawClockHand(gc, centerX, centerY, radius * 0.9, secondAngle);
@@ -183,14 +193,11 @@ public class Controller {
         gc.strokeLine(centerX, centerY, endX, endY);
     }
 
-
     private String calculateTimeDifference(String localTime, String colomboTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-
         LocalTime local = LocalTime.parse(localTime, formatter);
         LocalTime colombo = LocalTime.parse(colomboTime, formatter);
-
 
         Duration duration = Duration.between(local, colombo);
         long hours = duration.toHours();
